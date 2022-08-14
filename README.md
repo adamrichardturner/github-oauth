@@ -8,9 +8,11 @@ Full instructions are included in instructions.txt at the project root.
 
 1. [Follow these instructions](https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app) by GitHub on how to obtain a client ID and secret for GitHub OAuth. Fill out the registration form with the following details, for development use only:
 
-Application Name: OAuth Project (or any name for your project)
-Homepage URL: http://localhost:3000
-Authorization Callback URL: http://localhost:3000/auth/github/callback
+Application Name: OAuth Project (or any name for your project)  
+
+Homepage URL: http://localhost:3000  
+
+Authorization Callback URL: http://localhost:3000/auth/github/callback  
 
 Click "Register Application"
 
