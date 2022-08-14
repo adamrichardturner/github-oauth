@@ -18,7 +18,8 @@ Click "Register Application"
 
 2. Once you have obtained your client id and secret, store them in a .env file in the project root directory as follows:
 
-GITHUB_CLIENT_ID=<"CLIENT ID HERE">
+GITHUB_CLIENT_ID=<"CLIENT ID HERE">  
+
 GITHUB_CLIENT_SECRET=<"CLIENT SECRET HERE">
 
 3. Run ### `npm install` in a terminal at the project root directory.
