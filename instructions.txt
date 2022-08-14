@@ -1,0 +1,42 @@
+--GitHub OAuth Application--
+
+As per the readme, follow these instructions first to obtain your client ID and secret from GitHub, you will require a GitHub account:
+
+1. [Follow these instructions](https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app) by GitHub on how to obtain a client ID and secret for GitHub OAuth. Fill out the registration form with the following details, for development use only:
+
+Application Name: OAuth Project (or any name for your project)
+Homepage URL: http://localhost:3000
+Authorization Callback URL: http://localhost:3000/auth/github/callback
+
+Click "Register Application"
+
+2. Once you have obtained your client id and secret, store them in a .env file in the project root directory as follows:
+
+GITHUB_CLIENT_ID=<"CLIENT ID HERE">
+GITHUB_CLIENT_SECRET=<"CLIENT SECRET HERE">
+
+3. At the top of app.js, inside the “Package Imports” section, import the express-session module into a variable named session using the require() function.
+
+4. Next, in the “Express Project Setup” section, initialize the session by calling the session() function within app.use(). Inside session(), pass an object for the options as its argument. Within the object, set secret to 'codecademy', resave to false, and saveUnitialized to false.
+
+5. In the “Package Imports” section of app.js, import the passport module into a variable named passport using the require() function.
+
+6. We will also need to import the passport-github2 module. This module allows GitHub to be used for authentication. Import Strategy from passport-github2 into a variable named GitHubStrategy. Inside the “Passport Configurations” section, configure passport to use the GitHub strategy. Use the passport.use() function to pass in a new instance of GitHubStrategy(). Inside GitHubStrategy(), pass in a JSON object where clientId is set to the GitHub Client ID, clientSecret is set to the GitHub Client Secret, and callbackURL is set to the authorization callback URL set in GitHub’s OAuth App.
+
+7. Passport strategies require a verify callback function, which is used to find the user. Add a callback function as the second argument of the initialization of the GitHubStrategy instance we just created. Pass in accessToken, refreshToken, profile, and done as arguments. Return the profile in the done() function by passing null and profile as its arguments.
+
+8. Inside the “Express Project Setup” section, initialize Passport by calling passport.initialize() inside app.use().
+
+9. Below the Express configurations, configure our app to use Passport Session by calling passport.session() inside app.use().
+
+10. To facilitate login sessions, Passport serializes and deserializes user instances to and from the session. We’ll do this by serializing the complete GitHub profile. Inside, the Passport configurations section, call the serializeUser() method on passport passing in a callback function with two arguments—user and done. In the callback function, call the done() function passing in null and user.
+
+Next, implement the deserializeUser method on passport by passing a callback function with two arguments—user and done. In the callback function we’ll call done() passing in null and user.
+
+11. Let’s implement a new route in the “Routes” section for authenticating with passport. We’ll use the .get() method on app to the route /auth/github and pass as a middleware function, passport.authenticate(). passport.authenticate() takes two arguments— first the strategy employed, 'github', and for the second argument, pass the scope of the grant as an object. Use scope as a key and the value set to an array containing 'user'. When visiting /auth/github, the client will be redirected to GitHub for authorizing.
+
+12. Next, implement the Authorization callback URL, which was defined in the GitHub application settings. This is where GitHub will redirect to after a user authorizes it. Using the Express .get() method, define a route to '/auth/github/callback', and pass passport.authenticate() as a middleware function. Inside passport.authenticate(), pass the first argument 'github' for the scope, then as a second argument pass an object. Inside the object set the redirect URLs. Set the failureRedirect key to '/login', to redirect users back to the login page in the event of a failed authorization. Then set the successRedirect key to '/' to redirect users to the home page after a successful authorization attempt.
+
+13. Now, we will need to protect the /account route to make it only accessible if a user is logged in. Inside the existing /account route, pass ensureAuthenticated as a middleware function to the route before the callback function that returns the render() function.
+
+14. Finally, define the ensureAuthenticated() function to handle verifying if a request is authenticated. At the bottom of app.js, declare a function named ensureAuthenticated() with three parameters- req, res, and next. Use an if statement to check if req is is valid using the .isAuthenticated() method. If the request is valid, return the next() function, otherwise use res.redirect() to direct to the /login page.
